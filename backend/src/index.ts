@@ -49,7 +49,7 @@ app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
   next();
 });
-const allowedOrigins = ['http://localhost:3000','http://localhost:5173','https://funddemo.onrender.com'];
+const allowedOrigins = ['http://localhost:3000','http://localhost:5173','https://funddemo.onrender.com','http://localhost:5174'];
 
 console.log('Conectando a Sequelize...');
 connectSequelize();
