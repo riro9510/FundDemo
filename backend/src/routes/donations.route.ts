@@ -33,7 +33,7 @@ const router = express.Router();
  *               donorEmail:
  *                 type: string
  *                 description: Email address of the donor
- *                 example: "janesmith@example.com"
+ *                 example: "janesmithexample.com"
  *               amount:
  *                 type: number
  *                 description: Donation amount
@@ -71,7 +71,7 @@ const router = express.Router();
  *                   example: "Jane Smith"
  *                 donorEmail:
  *                   type: string
- *                   example: "janesmith@example.com"
+ *                   example: "janesmithexample.com"
  *                 amount:
  *                   type: number
  *                   example: 50.0
