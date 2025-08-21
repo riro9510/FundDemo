@@ -25,9 +25,12 @@
   },
   "homepage": "https://github.com/riro9510/newNodeTemplate#readme",
   "dependencies": {
+    "@eslint/eslintrc": "^3.3.1",
     "@types/archiver": "^6.0.3",
     "@types/pdfkit": "^0.17.2",
     "@types/pg": "^8.15.5",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
     "@types/ws": "^8.18.1",
     "archiver": "^7.0.1",
     "axios": "^1.11.0",
@@ -41,6 +44,7 @@
     "express": "^5.1.0",
     "express-validator": "^7.2.1",
     "helmet": "^8.1.0",
+    "joi": "^17.13.3",
     "jsonwebtoken": "^9.0.2",
     "module-alias": "^2.2.3",
     "mongoose": "^8.13.2",
@@ -51,6 +55,8 @@
     "pg": "^8.14.1",
     "pg-hstore": "^2.3.4",
     "sequelize": "^6.37.7",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "ws": "^8.18.3"
   },
   "devDependencies": {

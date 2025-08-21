@@ -210,7 +210,7 @@ const loadMiddlewares = (app: Express) => {
 
 export default loadMiddlewares;
 `,
-'tsconfig.paths.json': `
+  'tsconfig.paths.json': `
 {
   "compilerOptions": {
     "baseUrl": "./src",
@@ -219,7 +219,7 @@ export default loadMiddlewares;
     }
   }
 }
-`
+`,
 };
 const scriptPath = path.resolve(__dirname, '../check-env.sh');
 function createFolders(basePath, folders) {
