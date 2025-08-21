@@ -4,7 +4,12 @@ import jwt from 'jsonwebtoken';
 
 const getToken = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const payload = { text: 'Returning one minute token' };
+    const { clientId } = req.body;
+    if (!clientId) {
+      res.status(400).json({ error: 'clientId is required' });
+    }
+
+    const payload = { clientId };
     const token = jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: '60s' });
     res.json({ token, expiresIn: 60 });
   } catch (error) {

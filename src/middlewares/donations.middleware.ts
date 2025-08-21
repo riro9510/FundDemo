@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { donationSchema } from '@/validations/donations.joi.validation.js';
+import { donationSchema } from '@/validations/donationsSchema.js';
 
 const validateDonation = (req: Request, res: Response, next: NextFunction) => {
   const { error } = donationSchema.validate(req.body, { abortEarly: false });

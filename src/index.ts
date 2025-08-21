@@ -1,6 +1,6 @@
 import express from 'express';
 import 'dotenv/config';
-import { connectDB } from './config/database.js';
+import { connectSequelize } from './db/sequelize.js';
 import router from './routes/index.routes.js';
 import cors from 'cors';
 import { WebSocketServer } from 'ws';
@@ -29,7 +29,7 @@ app.use('/api', router);
 
 const allowedOrigins = ['http://localhost:3000'];
 
-connectDB();
+connectSequelize();
 app.use(
   cors({
     origin: function (origin, callback) {
