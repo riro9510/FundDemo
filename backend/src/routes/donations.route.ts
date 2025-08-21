@@ -58,10 +58,65 @@ const router = express.Router();
  *     responses:
  *       201:
  *         description: Donation created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                   example: 1
+ *                 donorName:
+ *                   type: string
+ *                   example: "Jane Smith"
+ *                 donorEmail:
+ *                   type: string
+ *                   example: "janesmith@example.com"
+ *                 amount:
+ *                   type: number
+ *                   example: 50.0
+ *                 currency:
+ *                   type: string
+ *                   example: "USD"
+ *                 description:
+ *                   type: string
+ *                   example: "This donation is to support the education fund."
+ *                 paymentMethod:
+ *                   type: string
+ *                   example: "credit_card"
+ *                 createdAt:
+ *                   type: string
+ *                   format: date-time
  *       400:
  *         description: Invalid input data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Invalid input data"
  *       401:
  *         description: Unauthorized
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Unauthorized"
+ *       500:
+ *         description: Server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Internal server error"
  */
 
 router.post('/', isAuthenticated(), validateDonation, donationsController.create);

@@ -39,7 +39,7 @@ const swaggerOptions = {
       },
     ],
   },
-  apis: ['./dist/routes/*.js'],
+  apis: [`${path.join(__dirname, '../routes/*.js')}`]
 };
 console.log('Configurando Swagger...');
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
