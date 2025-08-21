@@ -43,14 +43,14 @@ const swaggerSpec = swaggerJSDoc(swaggerOptions);
 const app = express();
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 10000;
 
-// 1️⃣ MIDDLEWARES BÁSICOS PRIMERO
+// 1️MIDDLEWARES BÁSICOS PRIMERO
 app.use(express.json());
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
   next();
 });
 
-// 2️⃣ CORS 
+// 2️CORS 
 const allowedOrigins = ['http://localhost:3000','http://localhost:5173','https://funddemo.onrender.com','http://localhost:5174'];
 app.use(cors({
   origin: function (origin, callback) {
@@ -66,20 +66,20 @@ app.use(cors({
   credentials: true,
 }));
 
-// 3️⃣ CONEXIÓN A BD
+// 3 CONEXIÓN A BD
 console.log('Conectando a Sequelize...');
 connectSequelize();
 
-// 4️⃣ RUTAS DE API (DEBEN IR ANTES DEL STATIC)
+// 4 RUTAS DE API (DEBEN IR ANTES DEL STATIC)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/api', router);
 
-// 5️⃣ ARCHIVOS ESTÁTICOS (después de las APIs)
+// 5 ARCHIVOS ESTÁTICOS (después de las APIs)
 app.use(express.static(path.join(__dirname, '..', 'public')));
 
-// 6️⃣ CATCH-ALL PARA SPA (AL FINAL)
+// 6 CATCH-ALL PARA SPA (AL FINAL)
 // ¡IMPORTANTE! Excluir rutas de API y WebSocket
-app.get('*', (req, res, next) => {
+app.get(/^\/(?!api|socket|api-docs).*$/, (req, res, next) => {
   // Excluir rutas que no deben ir al frontend
   if (req.originalUrl.startsWith('/api') || 
       req.originalUrl.startsWith('/socket') ||
@@ -89,7 +89,7 @@ app.get('*', (req, res, next) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
 
-// 7️⃣ WEB SOCKET (fuera del app express)
+// 7 WEB SOCKET (fuera del app express)
 console.log('Creando servidor HTTP...');
 const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
