@@ -11,7 +11,7 @@ const getToken = async (req: Request, res: Response, next: NextFunction) => {
 
     const payload = { clientId };
     const token = jwt.sign(payload, process.env.JWT_SECRET!, { expiresIn: '60s' });
-    res.json({ token, expiresIn: 60 });
+    res.json({ token, expiresIn: 300 });
   } catch (error) {
     next(error);
   }

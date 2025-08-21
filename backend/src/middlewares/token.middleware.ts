@@ -1,14 +1,18 @@
 import { tokenSchema } from '../validations/tokenSchema.js';
 import { Request, Response, NextFunction } from 'express';
+import type { WebSocket } from 'ws';
 
-export const validateUserId = (req: Request, res: Response, next: NextFunction) => {
-  const { error } = tokenSchema.validate(req.body, { abortEarly: false });
+export const validateClientIdWS = (payload: any, ws: WebSocket) => {
+  const { error } = tokenSchema.validate(payload, { abortEarly: false });
   if (error) {
-    res.status(400).json({
-      error: 'Validation failed',
-      details: error.details.map((d) => d.message),
-    });
-    return;
+    ws.send(
+      JSON.stringify({
+        type: 'error',
+        message: 'Validation failed',
+        details: error.details.map((d) => d.message),
+      })
+    );
+    return false;
   }
-  next();
+  return true;
 };

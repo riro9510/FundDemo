@@ -2,7 +2,6 @@ import express from 'express';
 import tokenController from '../controllers/token.controller.js';
 import { isAuthenticated } from '../middlewares/auth.middleware.js';
 import { errorHandler } from '../middlewares/error.middleware.js';
-import { validateUserId } from '../middlewares/token.middleware.js';
 const router = express.Router();
 
 /**
@@ -60,7 +59,7 @@ const router = express.Router();
  *         description: Internal server error
  */
 
-router.post('/', validateUserId, tokenController.getToken);
+router.post('/', tokenController.getToken);
 
 router.use(errorHandler);
 
