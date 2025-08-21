@@ -4,13 +4,17 @@ import { connectSequelize } from './db/sequelize.js';
 import router from './routes/index.routes.js';
 import cors from 'cors';
 import { WebSocketServer } from 'ws';
-import https from 'http';
+import http from 'http'; // Cambié a http (más común)
 import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import jwt from 'jsonwebtoken';
 import { validateClientIdWS } from './middlewares/token.middleware.js';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 console.log('Iniciando aplicación...');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const swaggerOptions = {
   definition: {
@@ -18,7 +22,7 @@ const swaggerOptions = {
     info: {
       title: 'Donations API',
       version: '1.0.0',
-      description: 'API para registrar y consultar donaciones (sesiones de 1 minuto).',
+      description: 'API para registrar y consultar donaciones.',
     },
     components: {
       securitySchemes: {
@@ -29,57 +33,70 @@ const swaggerOptions = {
         },
       },
     },
-    security: [
-      {
-        bearerAuth: [],
-      },
-    ],
+    security: [{ bearerAuth: [] }],
   },
   apis: ['./dist/routes/*.js'],
 };
+
 console.log('Configurando Swagger...');
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
 const app = express();
 const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 10000;
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+// 1️⃣ MIDDLEWARES BÁSICOS PRIMERO
 app.use(express.json());
-app.use('/api', router);
 app.use((req, res, next) => {
   console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
   next();
 });
-const allowedOrigins = ['http://localhost:3000','http://localhost:5173','https://funddemo.onrender.com','http://localhost:5174'];
 
+// 2️⃣ CORS 
+const allowedOrigins = ['http://localhost:3000','http://localhost:5173','https://funddemo.onrender.com','http://localhost:5174'];
+app.use(cors({
+  origin: function (origin, callback) {
+    console.log('CORS origin:', origin);
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'The CORS policy for this site does not allow access from the specified Origin.';
+      console.error(msg, origin);
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true,
+}));
+
+// 3️⃣ CONEXIÓN A BD
 console.log('Conectando a Sequelize...');
 connectSequelize();
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      console.log('CORS origin:', origin);
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) === -1) {
-        const msg =
-          'The CORS policy for this site does not allow access from the specified Origin.';
-        console.error(msg, origin);
-        return callback(new Error(msg), false);
-      }
-      return callback(null, true);
-    },
-    credentials: true,
-  })
-);
+// 4️⃣ RUTAS DE API (DEBEN IR ANTES DEL STATIC)
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+app.use('/api', router);
 
-app.use(express.json());
+// 5️⃣ ARCHIVOS ESTÁTICOS (después de las APIs)
+app.use(express.static(path.join(__dirname, '..', 'public')));
 
+// 6️⃣ CATCH-ALL PARA SPA (AL FINAL)
+// ¡IMPORTANTE! Excluir rutas de API y WebSocket
+app.get('*', (req, res, next) => {
+  // Excluir rutas que no deben ir al frontend
+  if (req.originalUrl.startsWith('/api') || 
+      req.originalUrl.startsWith('/socket') ||
+      req.originalUrl.startsWith('/api-docs')) {
+    return next(); // Pasar al siguiente middleware (devolverá 404)
+  }
+  res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
+});
+
+// 7️⃣ WEB SOCKET (fuera del app express)
 console.log('Creando servidor HTTP...');
-const server = https.createServer(app);
+const server = http.createServer(app);
 const wss = new WebSocketServer({ server });
 
 wss.on('connection', (ws) => {
   console.log('Nueva conexión WebSocket');
-  let timeoutHandle: NodeJS.Timeout | null = null;
+  let timeoutHandle: string | number | NodeJS.Timeout | null | undefined = null;
 
   ws.on('message', async (msg) => {
     console.log('Mensaje recibido en WS:', msg.toString());
@@ -104,9 +121,9 @@ wss.on('connection', (ws) => {
         console.log('Sesión expirada, cerrando WS');
         ws.send(JSON.stringify({ type: 'expired', message: 'Session expired' }));
         ws.close();
-      }, 300_000); 
+      }, 300000); 
 
-    } catch (err: any) {
+    } catch (err:any) {
       console.error('❌ WS error:', err);
       ws.send(
         JSON.stringify({

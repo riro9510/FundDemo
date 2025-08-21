@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --exec tsx src/index.ts",
-    "build": "tsc",
+    "build": "tsc && npm run copy-files",
+    "copy-files": "cpx \"public/**/*\" dist/ && cpx package.json dist/",
     "prod": "node dist/index.js",
     "prepare": "if [ \"$NODE_ENV\" != \"production\" ]; then husky install; fi",
     "start": "node -r module-alias/register dist/index.js",
@@ -46,6 +47,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "cors": "^2.8.5",
+    "cpx": "^1.5.0",
     "dayjs": "^1.11.13",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
