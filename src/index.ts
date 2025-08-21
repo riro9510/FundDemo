@@ -16,8 +16,22 @@ const swaggerOptions = {
       version: '1.0.0',
       description: 'API para registrar y consultar donaciones (sesiones de 1 minuto).',
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
   },
-  apis: ['./routes/*.js'],
+  apis: ['./dist/routes/*.js'],
 };
 const swaggerSpec = swaggerJSDoc(swaggerOptions);
 const app = express();
