@@ -1,4 +1,4 @@
-import { decryptAES } from '@/utils/crypto.js';
+import { decryptAES } from '../utils/crypto.js';
 import donationsService from '../services/donations.service.js';
 import { Request, Response, NextFunction } from 'express';
 
