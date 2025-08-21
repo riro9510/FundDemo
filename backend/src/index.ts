@@ -9,9 +9,13 @@ import swaggerJSDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import jwt from 'jsonwebtoken';
 import { validateClientIdWS } from './middlewares/token.middleware.js';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
 
 console.log('Iniciando aplicación...');
-
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const swaggerOptions = {
   definition: {
     openapi: '3.0.0',
@@ -72,6 +76,13 @@ app.use(
 );
 
 app.use(express.json());
+
+app.use(express.static(path.join(__dirname, '..', 'public')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
+});
+
 
 console.log('Creando servidor HTTP...');
 const server = https.createServer(app);

@@ -9,7 +9,7 @@ const IndexPage = () => {
      const [ws, setWs] = useState<WebSocket | null>(null);
 
     useEffect(() => {
-        const socket = new WebSocket('wss://funddemo.onrender.com');
+        const socket = new WebSocket('wss://funddemo.onrender.com/');
 
         socket.onopen = () => {
             console.log('WebSocket connected');
