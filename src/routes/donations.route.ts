@@ -2,7 +2,7 @@ import express from 'express';
 import donationsController from '../controllers/donations.controller.js';
 import { isAuthenticated } from '../middlewares/auth.middleware.js';
 import { errorHandler } from '../middlewares/error.middleware.js';
-import { validateDonation } from '@/middlewares/donations.middleware.js';
+import { validateDonation } from '../middlewares/donations.middleware.js';
 const router = express.Router();
 
 /**
