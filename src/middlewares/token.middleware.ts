@@ -1,4 +1,4 @@
-import { tokenSchema } from '@/validations/tokenSchema.js';
+import { tokenSchema } from '../validations/tokenSchema.js';
 import { Request, Response, NextFunction } from 'express';
 
 export const validateUserId = (req: Request, res: Response, next: NextFunction) => {

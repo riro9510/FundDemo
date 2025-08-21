@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { validUser } from '@/services/auth.service.js';
 
 // Extendemos el Request para que typescript sepa que existirá req.user
 declare module 'express-serve-static-core' {
