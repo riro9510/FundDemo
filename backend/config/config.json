@@ -1,0 +1,7 @@
+{
+  "type": "module",
+"sequelize": {
+  "config": "config/config.cjs"
+}
+
+}

@@ -1,0 +1,35 @@
+.tabs-container {
+  width: 100%;
+  background-color: var(--color-surface);
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.MuiTabs-root {
+  background-color: var(--color-primary);
+  border-radius: 8px;
+}
+
+.MuiTab-root {
+  color: var(--color-text);
+  font-weight: bold;
+  padding: 12px 16px;
+}
+
+.MuiTab-root.Mui-selected {
+  background-color: var(--color-secondary);
+  color: var(--color-surface);
+}
+
+.tab-content {
+  background-color: var(--color-surface);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.tab-content p {
+  color: var(--color-text);
+}

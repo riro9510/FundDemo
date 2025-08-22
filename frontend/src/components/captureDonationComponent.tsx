@@ -5,7 +5,7 @@ import { IDonation } from "../models/donations.interface";
 import '../styles/form.css';
 
 const DonationForm: React.FC = () => {
-    const { send:postData, loading, error } = useRequest((data:IDonation) => new PostRequest("/donations/",));
+    const { send:postData, loading, error } = useRequest((data:IDonation) => new PostRequest("/donations/",data));
 
     const [form, setForm] = useState<IDonation>({
         donorName: "",
