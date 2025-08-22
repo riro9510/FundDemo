@@ -221,8 +221,7 @@ router.get('/decode/',
 
   async (req, res, next) => {
     try {
-      const result = await donationsController.getAllDecode(req, res, next);
-      res.status(200).json(result);
+      await donationsController.getAllDecode(req, res, next);
     } catch (err: any) {
       console.error("❌ Error en donationsController.getAllDecode:", err);
       res.status(500).json({ error: "Error en el servidor", details: err.message });

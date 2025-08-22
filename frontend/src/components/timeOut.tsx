@@ -25,6 +25,8 @@ useEffect(() => {
 
 
   const isCritical = timer <= 10;
+  const minutes = Math.floor(timer / 60);
+  const seconds = timer % 60;
 
   return (
     <AnimatePresence>
@@ -35,7 +37,7 @@ useEffect(() => {
           animate={isCritical ? { scale: [1, 1.3, 1] } : { scale: 1 }}
           transition={isCritical ? { duration: 0.6, repeat: Infinity, ease: 'easeInOut' } : { duration: 0 }}
         >
-          {timer}s
+          {minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`}
         </motion.div>
       )}
     </AnimatePresence>
