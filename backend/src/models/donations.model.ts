@@ -16,9 +16,6 @@ const Donations = sequelize.define(
     donorEmail: {
       type: DataTypes.STRING,
       allowNull: false,
-      validate: {
-        isEmail: true,
-      },
     },
     amount: {
       type: DataTypes.DECIMAL(10, 2),

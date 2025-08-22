@@ -119,7 +119,7 @@ const router = express.Router();
  *                   example: "Internal server error"
  */
 
-router.post('/', isAuthenticated(), donationsController.create);
+router.post('/', isAuthenticated(),validateDonation, donationsController.create);
 /**
  * @swagger
  * /donations/encode:
