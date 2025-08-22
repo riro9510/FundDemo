@@ -24,6 +24,12 @@ const swaggerOptions = {
       version: '1.0.0',
       description: 'API para registrar y consultar donaciones.',
     },
+    servers: [
+      {
+        url: '/api', 
+        description: 'current server',
+      },
+    ],
     components: {
       securitySchemes: {
         bearerAuth: {
