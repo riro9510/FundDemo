@@ -3,7 +3,6 @@ import donationsController from '../controllers/donations.controller.js';
 import { isAuthenticated } from '../middlewares/auth.middleware.js';
 import { errorHandler } from '../middlewares/error.middleware.js';
 import { validateDonation } from '../middlewares/donations.middleware.js';
-import { Request, Response, NextFunction } from 'express';
 const router = express.Router();
 
 /**
@@ -120,42 +119,7 @@ const router = express.Router();
  *                   example: "Internal server error"
  */
 
-router.post('/', 
-  async (req, res, next) => {
-    try {
-      // Primero autenticación
-      await isAuthenticated()(req, res, next);
-    } catch (err:any) {
-      console.error("❌ Error en isAuthenticated:", err);
-      res.status(401).json({ error: "No autorizado", details: err.message });
-      return
-    }
-  },
-
-  async (req, res, next) => {
-    try {
-      // Luego validación de datos
-      await validateDonation(req, res, next);
-    } catch (err:any) {
-      console.error("❌ Error en validateDonation:", err);
-       res.status(400).json({ error: "Datos inválidos", details: err.message });
-       return;
-    }
-  },
-
-  async (req, res,next) => {
-    try {
-      // Finalmente creación de la donación
-      const result = await donationsController.create(req, res, next);
-      res.status(201).json(result);
-    } catch (err:any) {
-      console.error("❌ Error en donationsController.create:", err);
-      res.status(500).json({ error: "Error en el servidor", details: err.message });
-      return;
-    }
-  }
-);
-
+router.post('/', isAuthenticated(), validateDonation, donationsController.create);
 /**
  * @swagger
  * /donations/encode:
@@ -171,28 +135,7 @@ router.post('/',
  *       401:
  *         description: Unauthorized
  */
-router.get('/encode/', 
-  async (req, res, next) => {
-    try {
-      await isAuthenticated()(req, res, next);
-    } catch (err: any) {
-      console.error("❌ Error en isAuthenticated (encode):", err);
-      res.status(401).json({ error: "No autorizado", details: err.message });
-      return;
-    }
-  },
-
-  async (req, res, next) => {
-    try {
-      const result = await donationsController.getAllEncode(req, res, next);
-      res.status(200).json(result);
-    } catch (err: any) {
-      console.error("❌ Error en donationsController.getAllEncode:", err);
-      res.status(500).json({ error: "Error en el servidor", details: err.message });
-      return;
-    }
-  }
-);
+router.get('/encode/', isAuthenticated(), donationsController.getAllEncode);
 /**
  * @swagger
  * /donations/decode:
@@ -208,27 +151,7 @@ router.get('/encode/',
  *       401:
  *         description: Unauthorized
  */
-router.get('/decode/', 
-  async (req, res, next) => {
-    try {
-      await isAuthenticated()(req, res, next);
-    } catch (err: any) {
-      console.error("❌ Error en isAuthenticated (decode):", err);
-      res.status(401).json({ error: "No autorizado", details: err.message });
-      return;
-    }
-  },
-
-  async (req, res, next) => {
-    try {
-      await donationsController.getAllDecode(req, res, next);
-    } catch (err: any) {
-      console.error("❌ Error en donationsController.getAllDecode:", err);
-      res.status(500).json({ error: "Error en el servidor", details: err.message });
-      return;
-    }
-  }
-);
+router.get('/decode/', isAuthenticated(), donationsController.getAllDecode);
 
 router.use(errorHandler);
 
