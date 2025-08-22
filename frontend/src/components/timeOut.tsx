@@ -5,15 +5,24 @@ import { useWebSocket } from '../context/useWebSocketToken';
 
 export const TimerDisplay: React.FC = () => {
  const { timeOut } = useWebSocket();
-  const [timer, setTimer] = useState(timeOut);
+ const [timer, setTimer] = useState(timeOut || 0);
 
  useEffect(() => {
-    const interval = setInterval(() => {
-      setTimer(prev => Math.max(prev - 1, 0)); 
-    }, 1000);
+  if (timeOut) {
+    setTimer(timeOut);
+  }
+}, [timeOut]);
 
-    return () => clearInterval(interval);
-  }, []); 
+
+useEffect(() => {
+  if (timer <= 0) return;
+  const interval = setInterval(() => {
+    setTimer(prev => Math.max(prev - 1, 0));
+  }, 1000);
+
+  return () => clearInterval(interval);
+}, [timer]);
+
 
   const isCritical = timer <= 10;
 
