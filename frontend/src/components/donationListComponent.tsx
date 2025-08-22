@@ -16,7 +16,12 @@ const DonationsList = ({}) => {
         const fetchData = async () => {
             const response = isEncoded ? await sendEncode() : await sendDecode();
             console.log('Response donation List:', response);
-            setDonations(response!);
+            if (!response) return;
+            const donationsNormalized = response.map((d: { amount: any; }) => ({
+            ...d,
+            amount: Number(d.amount)
+            }));
+            setDonations(donationsNormalized);
         }
         fetchData().catch(console.error);
         },[isEncoded]);
