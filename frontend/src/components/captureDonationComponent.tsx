@@ -10,7 +10,7 @@ const DonationForm: React.FC = () => {
     const [form, setForm] = useState<IDonation>({
         donorName: "",
         donorEmail: "",
-        amount: 0,
+        amount: "" as unknown as number,
         description: "",
         paymentMethod: "credit_card",
         status: "completed", 
@@ -21,12 +21,9 @@ const DonationForm: React.FC = () => {
     ) => {
         const { name, value } = e.target;
         setForm((prev) => ({
-          ...prev,
-          [name]:
-            name === "amount"
-              ? value === "" ? 0 : parseFloat(value)
-              : value,
-  }));
+            ...prev,
+            [name]: name === "amount" ? (value === "" ? "" : parseFloat(value)) : value,
+        }));
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -34,7 +31,7 @@ const DonationForm: React.FC = () => {
         await postData({
             donorName: form.donorName,
             donorEmail: form.donorEmail,
-            amount: form.amount,
+            amount: Number(form.amount),
             description: form.description,
             paymentMethod: form.paymentMethod,
             status: "completed",
