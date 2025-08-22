@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import 'react-toastify/dist/ReactToastify.css';
-import { PALETTE } from '../utils/theme';
+import '../styles/cta.css'; 
 
 const CtaComponent: React.FC<{ ctaStatus: (id:any) => void }> = ({ ctaStatus }) => {
     const [tokenActivo, setTokenActivo] = useState(false);

@@ -3,6 +3,7 @@ import { IDonation } from '../models/donations.interface';
 import { PALETTE } from '../utils/theme';
 import { useRequest } from '../hooks/useRequest';
 import { GetRequest } from '@/models/GetRequest';
+import '../styles/donationList.css';
 
 const DonationsList = ({}) => {
     const [isEncoded, setIsEncoded] = useState(true);
