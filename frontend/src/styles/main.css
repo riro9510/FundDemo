@@ -31,3 +31,34 @@ body.dark {
   --color-text: #F9FAFB;
   --color-text-rgb: 249, 250, 251;
 }
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--color-text);
+  background-color: var(--color-background);
+}
+
+.app-container {
+  padding: var(--spacing-sm);
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@media (min-width: 768px) {
+  body {
+    font-size: 18px;
+  }
+  
+  .app-container {
+    padding: var(--spacing-md);
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}

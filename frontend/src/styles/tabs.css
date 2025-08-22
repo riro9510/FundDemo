@@ -1,21 +1,30 @@
+
+.tabs-wrapper {
+  position: relative;
+  padding-top: 60px; 
+}
+
 .tabs-container {
   width: 100%;
   background-color: var(--color-surface);
-  border-radius: 8px;
+  border-radius: var(--border-radius);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  padding: 16px;
-  margin-bottom: 24px;
+  padding: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
 }
 
 .MuiTabs-root {
   background-color: var(--color-primary);
-  border-radius: 8px;
+  border-radius: var(--border-radius) var(--border-radius) 0 0;
+  min-height: 48px; 
 }
 
 .MuiTab-root {
-  color: var(--color-text);
+  color: var(--color-surface);
   font-weight: bold;
-  padding: 12px 16px;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  min-height: 48px; 
+  font-size: 0.9rem; 
 }
 
 .MuiTab-root.Mui-selected {
@@ -25,11 +34,23 @@
 
 .tab-content {
   background-color: var(--color-surface);
-  padding: 20px;
-  border-radius: 8px;
+  padding: var(--spacing-sm);
+  border-radius: 0 0 var(--border-radius) var(--border-radius);
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
-.tab-content p {
-  color: var(--color-text);
+
+@media (min-width: 768px) {
+  .tabs-container {
+    padding: var(--spacing-md);
+  }
+  
+  .MuiTab-root {
+    font-size: 1rem;
+    padding: var(--spacing-sm);
+  }
+  
+  .tab-content {
+    padding: var(--spacing-md);
+  }
 }

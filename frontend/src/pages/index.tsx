@@ -9,7 +9,7 @@ const IndexPage = () => {
   const { tokenActivo, sendMessage } = useWebSocket();
 
    return (
-  <div>
+  <div className="app-container">
     {tokenActivo ? (
       <MyTabsComponent />
     ) : (

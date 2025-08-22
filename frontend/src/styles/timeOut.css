@@ -1,19 +1,29 @@
+
 .timerDisplay {
   padding: 10px 15px;
   border-radius: 20px;
   color: var(--color-surface);
   font-weight: bold;
-  position: absolute;
-  top: 10px;
-  left: 50%;
+  position: fixed; 
+  top: 15px; 
+  left: 43%;
   transform: translateX(-50%);
-  z-index: 999;
-  font-size: 16px;
+  z-index: 1000;
+  font-size: 14px;
   text-align: center;
-  background-color: rgba(var(--color-text-rgb), 0.7); 
+  background-color: rgba(var(--color-text-rgb), 0.7);
   transition: background-color 0.3s ease;
+  min-width: 60px; 
 }
 
 .timerDisplay.critical {
-  background-color: var(--color-error); 
+  background-color: var(--color-error);
+}
+
+@media (min-width: 768px) {
+  .timerDisplay {
+    font-size: 16px;
+    top: 150px;
+    left: 48%;
+  }
 }

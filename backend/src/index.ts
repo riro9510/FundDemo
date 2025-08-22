@@ -45,7 +45,7 @@ const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 10000;
 
 app.use(express.json());
 app.use((req, res, next) => {
-  //console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl}`);
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.originalUrl} ${res.statusCode}`);
   next();
 });
 
@@ -89,7 +89,7 @@ const server = https.createServer(app);
 const wss = new WebSocketServer({ server });
 
 wss.on('connection', (ws) => {
-  //console.log('Nueva conexión WebSocket');
+  console.log('Nueva conexión WebSocket');
   let timeoutHandle: string | number | NodeJS.Timeout | null | undefined = null;
 
   ws.on('message', async (msg) => {
