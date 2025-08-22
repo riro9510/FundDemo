@@ -1,12 +1,14 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { setToken } from '../services/api';
+import { v4 as uuidv4 } from 'uuid';
 
 interface IWebSocketContext {
   tokenActivo: boolean;
   token: string | null;
   timeOut: number;
   sendMessage: (id: string) => void;
+  renewToken: () => void;
 }
 
 const WebSocketContext = createContext<IWebSocketContext | undefined>(undefined);
@@ -54,9 +56,18 @@ export const WebSocketProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       setTokenActivo(true);
     }
   };
+  const renewToken = () => {
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    toast.info("Reintentando conexión...");
+    ws.send(JSON.stringify({ clientId: uuidv4() }));
+  } else {
+    toast.error("Socket no disponible para renovar token");
+  }
+};
+
 
   return (
-    <WebSocketContext.Provider value={{ tokenActivo, token, timeOut, sendMessage }}>
+    <WebSocketContext.Provider value={{ tokenActivo, token, timeOut, sendMessage, renewToken }}>
       {children}
     </WebSocketContext.Provider>
   );

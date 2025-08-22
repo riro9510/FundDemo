@@ -4,6 +4,7 @@ import { PALETTE } from '../utils/theme';
 import { useRequest } from '../hooks/useRequest';
 import { GetRequest } from '@/models/GetRequest';
 import '../styles/donationList.css';
+import { useWebSocket } from '../context/useWebSocketToken';
 
 const DonationsList = ({}) => {
     const [isEncoded, setIsEncoded] = useState(true);
@@ -11,6 +12,7 @@ const DonationsList = ({}) => {
     const {send:sendDecode, error:errorDecode, loading:loagingDecode} = useRequest(() => new GetRequest<IDonation>('/donations/decode/'));
     const toggleEncode = () => setIsEncoded(!isEncoded);
     const [donations, setDonations] = useState<IDonation[]>([]);
+    const { renewToken } = useWebSocket();
 
     useEffect(() => { 
         const fetchData = async () => {
@@ -23,7 +25,11 @@ const DonationsList = ({}) => {
             }));
             setDonations(donationsNormalized);
         }
-        fetchData().catch(console.error);
+        fetchData().catch((err) => {
+            if (err.includes(401)) {
+                renewToken();
+            }
+        });
         },[isEncoded]);
 
    if (loagingDecode || loagingEncode) {

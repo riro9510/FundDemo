@@ -14,7 +14,7 @@
 }
 
 .MuiTabs-root {
-  background-color: var(--color-primary);
+  background-color: rgba(var(--color-text-rgb), 0.8);
   border-radius: var(--border-radius) var(--border-radius) 0 0;
   min-height: 48px; 
 }

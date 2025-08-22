@@ -4,10 +4,16 @@ import  {PostRequest} from "../models/PostRequest";
 import { IDonation } from "../models/donations.interface";
 import '../styles/form.css';
 import { toast } from "react-toastify";
+import MessageBox from "./messageBox";
+import { useWebSocket } from '../context/useWebSocketToken';
+
 
 const DonationForm: React.FC = () => {
     const { send:postData, loading, error } = useRequest((data:IDonation) => new PostRequest("/donations/",data));
     const [loadingHold, setLoadingHold] = useState(false);
+    const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+    const { renewToken } = useWebSocket();
+
 
     const [form, setForm] = useState<IDonation>({
         donorName: "",
@@ -43,7 +49,7 @@ const handleSubmit = async (e: React.FormEvent) => {
         });
 
         if (response.status === 201) {
-            toast.success("Donation registered successfully!");
+            setMessage({ type: "success", text: "Donation registered successfully!" });
             setForm({
                 donorName: "",
                 donorEmail: "",
@@ -53,13 +59,23 @@ const handleSubmit = async (e: React.FormEvent) => {
                 status: "completed",
             });
         }
-    } catch (err) {
-        toast.error("Failed to register donation");
+    } catch (err:any) {
+        if (err.includes(401)) {
+            renewToken();
+        }
+        setMessage({ type: "error", text: "Failed to register donation" });
+
     } finally {
         setLoadingHold(false);
     }
 };
-
+    if(message) {
+      <MessageBox
+      type={message.type}
+      message={message.text}
+      onClose={() => setMessage(null)}
+  />
+    }
     if (loading|| loadingHold) {
     return (
         <div className="loaderContainer">
