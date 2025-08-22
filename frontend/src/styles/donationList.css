@@ -1,0 +1,112 @@
+.container {
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+    border-radius: 12px;
+    background-color: var(--color-background);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.toggleButton {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.donationsList {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.donationItem {
+    padding: 15px;
+    border-radius: 10px;
+    background-color: var(--color-surface);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.donorInfo {
+    font-weight: bold;
+    color: var(--color-text);
+}
+
+.amountInfo {
+    color: var(--color-text);
+    margin-top: 4px;
+}
+
+.description {
+    font-style: italic;
+    color: #555; 
+    margin-top: 2px;
+}
+
+.status {
+    padding: 5px 10px;
+    border-radius: 6px;
+    color: white;
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.loaderContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background: var(--color-background);
+}
+
+.spinner {
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid var(--color-primary);
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+}
+
+.loadingText {
+    margin-top: 16px;
+    font-size: 18px;
+    color: var(--color-text);
+    font-weight: 500;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.toggleButton.encoded {
+    background-color: var(--color-primary);
+}
+
+.toggleButton.decoded {
+    background-color: var(--color-secondary);
+}
+
+.status.completed {
+    background-color: var(--color-success);
+}
+
+.status.failed {
+    background-color: var(--color-error);
+}
+
+.status.pending {
+    background-color: #FBBF24; 
+}
