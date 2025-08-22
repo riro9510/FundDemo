@@ -3,9 +3,11 @@ import { useRequest } from "../hooks/useRequest";
 import  {PostRequest} from "../models/PostRequest";
 import { IDonation } from "../models/donations.interface";
 import '../styles/form.css';
+import { toast } from "react-toastify";
 
 const DonationForm: React.FC = () => {
     const { send:postData, loading, error } = useRequest((data:IDonation) => new PostRequest("/donations/",data));
+    const [loadingHold, setLoadingHold] = useState(false);
 
     const [form, setForm] = useState<IDonation>({
         donorName: "",
@@ -26,9 +28,12 @@ const DonationForm: React.FC = () => {
         }));
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        await postData({
+const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoadingHold(true);
+
+    try {
+        const response = await postData({
             donorName: form.donorName,
             donorEmail: form.donorEmail,
             amount: Number(form.amount),
@@ -36,16 +41,33 @@ const DonationForm: React.FC = () => {
             paymentMethod: form.paymentMethod,
             status: "completed",
         });
-        setForm({
-            donorName: "",
-            donorEmail: "",
-            amount: 0,
-            description: "",
-            paymentMethod: "credit_card",
-            status: "completed",
-        });
-    };
 
+        if (response.status === 201) {
+            toast.success("Donation registered successfully!");
+            setForm({
+                donorName: "",
+                donorEmail: "",
+                amount: 0,
+                description: "",
+                paymentMethod: "credit_card",
+                status: "completed",
+            });
+        }
+    } catch (err) {
+        toast.error("Failed to register donation");
+    } finally {
+        setLoadingHold(false);
+    }
+};
+
+    if (loading|| loadingHold) {
+    return (
+        <div className="loaderContainer">
+            <div className="spinner"></div>
+            <p className="loadingText">Loading...</p>
+        </div>
+    );
+}
     return (
   <div className="form-container">
     <div className="form-card">
