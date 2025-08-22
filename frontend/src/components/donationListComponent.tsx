@@ -15,6 +15,7 @@ const DonationsList = ({}) => {
     useEffect(() => { 
         const fetchData = async () => {
             const response = isEncoded ? await sendEncode() : await sendDecode();
+            console.log('Response donation List:', response);
             setDonations(response!);
         }
         fetchData().catch(console.error);
