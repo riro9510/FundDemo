@@ -1,56 +1,60 @@
 'use strict';
 
-/** @type {import('sequelize-cli').Migration} */
+const { DataTypes } = require('sequelize');
+const sequelize = require('../db/sequelize').default; // tu conexión Sequelize
+
 module.exports = {
-  async up (queryInterface, Sequelize) {
-     await queryInterface.createTable('donations', {
+  up: async (queryInterface) => {
+    await queryInterface.createTable('donations', {
       id: {
-        type: Sequelize.INTEGER,
+        type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true,
       },
       donorName: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
       },
       donorEmail: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
       },
       amount: {
-        type: Sequelize.DECIMAL(10, 2),
+        type: DataTypes.DECIMAL(10, 2),
         allowNull: false,
       },
       currency: {
-        type: Sequelize.STRING,
+        type: DataTypes.STRING,
         allowNull: false,
         defaultValue: 'USD',
       },
       description: {
-        type: Sequelize.TEXT,
+        type: DataTypes.TEXT,
         allowNull: true,
       },
       paymentMethod: {
-        type: Sequelize.ENUM('credit_card', 'paypal', 'bank_transfer', 'other'),
+        type: DataTypes.ENUM('credit_card', 'paypal', 'bank_transfer', 'other'),
         allowNull: false,
       },
       status: {
-        type: Sequelize.ENUM('pending', 'completed', 'failed'),
+        type: DataTypes.ENUM('pending', 'completed', 'failed'),
         allowNull: false,
         defaultValue: 'pending',
       },
       createdAt: {
+        type: DataTypes.DATE,
         allowNull: false,
-        type: Sequelize.DATE,
+        defaultValue: DataTypes.NOW,
       },
       updatedAt: {
+        type: DataTypes.DATE,
         allowNull: false,
-        type: Sequelize.DATE,
+        defaultValue: DataTypes.NOW,
       },
     });
   },
 
-  async down (queryInterface, Sequelize) {
+  down: async (queryInterface) => {
     await queryInterface.dropTable('donations');
-  }
+  },
 };
