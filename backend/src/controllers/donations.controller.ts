@@ -35,8 +35,35 @@ const getAllDecode = async (req: Request, res: Response, next: NextFunction) => 
   }
 };
 
+const deleteOne = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { id } = req.params;
+    const deleted = await donationsService.deleteOne(id as unknown as number);
+
+    if (!deleted) {
+      res.status(404).json({ message: "Donation not found" });
+      return;
+    }
+
+    res.json({ message: `Order 66 executed. Donation ${id} has been removed.` });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const deleteAll = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const result = await donationsService.deleteAll();
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+};
 export default {
   create,
   getAllEncode,
   getAllDecode,
+  deleteOne,
+  deleteAll,
 };
+

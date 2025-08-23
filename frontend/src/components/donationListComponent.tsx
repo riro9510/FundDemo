@@ -13,6 +13,9 @@ const DonationsList = ({}) => {
     const toggleEncode = () => setIsEncoded(!isEncoded);
     const [donations, setDonations] = useState<IDonation[]>([]);
     const { renewToken } = useWebSocket();
+    function splitStringEveryNChars(str:string, n:number) {
+    return str.match(new RegExp(`.{1,${n}}`, 'g'));
+    }
 
     useEffect(() => { 
         const fetchData = async () => {
@@ -56,9 +59,24 @@ return (
             {donations.map((donation) => (
                 <div key={donation.id} className="donationItem">
                     <div>
-                        <div className="donorInfo">
-                            {donation.donorName} ({donation.donorEmail})
-                        </div>
+                         {!isEncoded ? (
+          <div className="donorInfo">
+            {donation.donorName} ({donation.donorEmail})
+          </div>
+        ) : (
+          <>
+            {splitStringEveryNChars(donation.donorName, 25)?.map((part, index) => (
+              <div key={`name-${index}`} className="donorInfo">
+                {part}
+              </div>
+            ))}
+            {splitStringEveryNChars(donation.donorEmail, 25)?.map((part, index) => (
+              <div key={`email-${index}`} className="donorInfo">
+                {part}
+              </div>
+            ))}
+          </>
+        )}
                         <div className="amountInfo">
                             {isEncoded
                                 ? btoa(donation.amount.toString())

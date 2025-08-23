@@ -153,6 +153,52 @@ router.get('/encode/', isAuthenticated(), donationsController.getAllEncode);
  */
 router.get('/decode/', isAuthenticated(), donationsController.getAllDecode);
 
+/**
+ * @swagger
+ * /donations/{id}:
+ *   delete:
+ *     summary: Delete a donation by ID
+ *     description: Deletes a specific donation record by its ID. 
+ *                  (In most real cases, this would just set the record to inactive instead of a hard delete.)
+ *     tags: [Donations]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The donation ID to delete
+ *     responses:
+ *       200:
+ *         description: Donation successfully deleted
+ *       401:
+ *         description: Unauthorized
+ *       404:
+ *         description: Donation not found
+ */
+router.delete('/:id', isAuthenticated(), donationsController.deleteOne);
+
+/**
+ * @swagger
+ * /donations/order66:
+ *   delete:
+ *     summary: Delete ALL donations (use with caution!)
+ *     description: 
+ *       ⚠️ **Note:** Of course this would never go to production...  
+ *       or maybe it would 🤔 (just kidding, but super useful for migrations).
+ *     tags: [Donations]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: All donations deleted successfully
+ *       401:
+ *         description: Unauthorized
+ */
+router.delete('/order66', isAuthenticated(), donationsController.deleteAll);
+
 router.use(errorHandler);
 
 export default router;
