@@ -20,9 +20,9 @@ const DonationsList = ({}) => {
     useEffect(() => { 
         const fetchData = async () => {
             const response = isEncoded ? await sendEncode() : await sendDecode();
-            console.log('Response donation List:', response);
-            if (!response) return;
-            const donationsNormalized = response.map((d: { amount: any; }) => ({
+            console.log('Response donation List:', response.data);
+            if (!response.data) return;
+            const donationsNormalized = response.data.map((d: { amount: any; }) => ({
             ...d,
             amount: Number(d.amount)
             }));
@@ -51,7 +51,7 @@ return (
                 onClick={toggleEncode}
                 className={`toggleButton ${isEncoded ? 'encoded' : 'decoded'}`}
             >
-                {isEncoded ? 'Encoded' : 'Decoded'}
+                {!isEncoded ? 'Show encoded list' : 'Show decoded list'}
             </button>
         </div>
 

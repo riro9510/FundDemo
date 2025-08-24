@@ -6,6 +6,7 @@ import '../styles/form.css';
 import { toast } from "react-toastify";
 import MessageBox from "./messageBox";
 import { useWebSocket } from '../context/useWebSocketToken';
+import { time } from "framer-motion";
 
 
 const DonationForm: React.FC = () => {
@@ -35,40 +36,43 @@ const DonationForm: React.FC = () => {
     };
 
 const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoadingHold(true);
+  e.preventDefault();
+  setLoadingHold(true);
 
-    try {
-        const response = await postData({
-            donorName: form.donorName,
-            donorEmail: form.donorEmail,
-            amount: Number(form.amount),
-            description: form.description,
-            paymentMethod: form.paymentMethod,
-            status: "completed",
+  try {
+    const response = await postData({
+      donorName: form.donorName,
+      donorEmail: form.donorEmail,
+      amount: Number(form.amount),
+      description: form.description,
+      paymentMethod: form.paymentMethod,
+      status: "completed",
+    });
+
+    if (response.status === 201) {
+      setLoadingHold(false);
+      setMessage({ type: "success", text: "Donation registered successfully!" });
+
+      setTimeout(() => {
+        setForm({               
+          donorName: "",
+          donorEmail: "",
+          amount: 0,
+          description: "",
+          paymentMethod: "credit_card",
+          status: "completed",
         });
 
-        if (response.status === 201) {
-            setMessage({ type: "success", text: "Donation registered successfully!" });
-            setForm({
-                donorName: "",
-                donorEmail: "",
-                amount: 0,
-                description: "",
-                paymentMethod: "credit_card",
-                status: "completed",
-            });
-        }
-    } catch (err:any) {
-        if (err.includes(401)) {
-            renewToken();
-        }
-        setMessage({ type: "error", text: "Failed to register donation" });
-
-    } finally {
-        setLoadingHold(false);
+        setTimeout(() => setMessage(null), 3000);
+      }, 500);
     }
+  } catch (err: any) {
+    setMessage({ type: "error", text: "Failed to register donation" });
+    setTimeout(() => setMessage(null), 3000);
+    setLoadingHold(false);
+  }
 };
+
     if(message) {
       <MessageBox
       type={message.type}
@@ -90,76 +94,94 @@ const handleSubmit = async (e: React.FormEvent) => {
       <h2 className="form-title">New Donation</h2>
 
       <form onSubmit={handleSubmit} className="form">
-        <div className="form-group">
-          <label>Donor Name</label>
-          <input
-            className="form-input"
-            name="donorName"
-            value={form.donorName}
-            onChange={handleChange}
-            required
-          />
-        </div>
+  <div className="form-group">
+    <label>Donor Name</label>
+    <input
+      className="form-input"
+      name="donorName"
+      value={form.donorName}
+      onChange={handleChange}
+      required
+      minLength={2}
+      maxLength={100}
+      pattern="^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$"
+      title="Name can just contain letters and spaces"
+    />
+  </div>
 
-        <div className="form-group">
-          <label>Email</label>
-          <input
-            type="email"
-            className="form-input"
-            name="donorEmail"
-            value={form.donorEmail}
-            onChange={handleChange}
-            required
-          />
-        </div>
+  <div className="form-group">
+    <label>Email</label>
+    <input
+      type="email"
+      className="form-input"
+      name="donorEmail"
+      value={form.donorEmail}
+      onChange={handleChange}
+      required
+    />
+  </div>
 
-        <div className="form-group">
-          <label>Amount</label>
-          <input
-            type="number"
-            className="form-input"
-            name="amount"
-            value={form.amount}
-            onChange={handleChange}
-            required
-          />
-        </div>
+  <div className="form-group">
+    <label>Amount</label>
+    <input
+      type="number"
+      className="form-input"
+      name="amount"
+      value={form.amount}
+      onChange={handleChange}
+      required
+      min={1}
+      step="0.01"
+      title="The amount must be a positive number"
+    />
+  </div>
 
-        <div className="form-group">
-          <label>Description</label>
-          <textarea
-            className="form-input"
-            name="description"
-            value={form.description ?? ""}
-            onChange={handleChange}
-          />
-        </div>
+  <div className="form-group">
+    <label>Description</label>
+    <textarea
+      className="form-input"
+      name="description"
+      value={form.description ?? ""}
+      onChange={handleChange}
+      maxLength={500}
+      title="500 characters max"
+    />
+  </div>
 
-        <div className="form-group">
-          <label>Payment Method</label>
-          <select
-            className="form-input"
-            name="paymentMethod"
-            value={form.paymentMethod}
-            onChange={handleChange}
-          >
-            <option value="credit_card">Credit Card</option>
-            <option value="paypal">PayPal</option>
-            <option value="bank_transfer">Bank Transfer</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
+  <div className="form-group">
+    <label>Payment Method</label>
+    <select
+      className="form-input"
+      name="paymentMethod"
+      value={form.paymentMethod}
+      onChange={handleChange}
+      required
+    >
+      <option value="">-- Choose --</option>
+      <option value="credit_card">Credit Card</option>
+      <option value="paypal">PayPal</option>
+      <option value="bank_transfer">Bank Transfer</option>
+      <option value="other">Other</option>
+    </select>
+  </div>
 
-        <button
-          type="submit"
-          className="form-button"
-          disabled={loading}
-        >
-          {loading ? "Sending..." : "Register Donation"}
-        </button>
+  <button
+    type="submit"
+    className="form-button"
+    disabled={loading}
+  >
+    {loading ? "Sending..." : "Register Donation"}
+  </button>
 
-        {error && <p className="error-text">{error}</p>}
-      </form>
+  {error && <p className="error-text">{error}</p>}
+</form>
+       {message && (
+        <MessageBox
+          type={message.type}
+          message={message.text}
+          onClose={() => setMessage(null)}
+        />
+      )}
     </div>
   </div>
 );

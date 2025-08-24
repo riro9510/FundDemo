@@ -1,9 +1,11 @@
+
+import { AxiosResponse } from 'axios';
 export abstract class Request<T> {
   constructor(protected endpoint: string, protected data?: unknown) {}
 
-  abstract send(): Promise<T>;
+  abstract send(): Promise<AxiosResponse<T>>;
 
-  protected async handleRequest(fetchFunction: () => Promise<T>): Promise<T> {
+  protected async handleRequest(fetchFunction: () => Promise<AxiosResponse<T>>): Promise<AxiosResponse<T>> {
     try {
       return await fetchFunction();
     } catch (error) {
