@@ -155,6 +155,25 @@ router.get('/decode/', isAuthenticated(), donationsController.getAllDecode);
 
 /**
  * @swagger
+ * /donations/order66:
+ *   delete:
+ *     summary: Delete ALL donations (use with caution!)
+ *     description: 
+ *       ⚠️ **Note:** Of course this would never go to production...  
+ *       or maybe it would 🤔 (just kidding, but super useful for migrations).
+ *     tags: [Donations]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: All donations deleted successfully
+ *       401:
+ *         description: Unauthorized
+ */
+router.delete('/order66', isAuthenticated(), donationsController.deleteAll);
+
+/**
+ * @swagger
  * /donations/{id}:
  *   delete:
  *     summary: Delete a donation by ID
@@ -180,24 +199,6 @@ router.get('/decode/', isAuthenticated(), donationsController.getAllDecode);
  */
 router.delete('/:id', isAuthenticated(), donationsController.deleteOne);
 
-/**
- * @swagger
- * /donations/order66:
- *   delete:
- *     summary: Delete ALL donations (use with caution!)
- *     description: 
- *       ⚠️ **Note:** Of course this would never go to production...  
- *       or maybe it would 🤔 (just kidding, but super useful for migrations).
- *     tags: [Donations]
- *     security:
- *       - bearerAuth: []
- *     responses:
- *       200:
- *         description: All donations deleted successfully
- *       401:
- *         description: Unauthorized
- */
-router.delete('/order66', isAuthenticated(), donationsController.deleteAll);
 
 router.use(errorHandler);
 
